@@ -34,13 +34,16 @@ public class Sykkel {
     }
 
     public void setErIBruk(boolean iBruk) {
-        iBruk = true;
+        this.iBruk = iBruk; 
     }
 
    public boolean erBooket() {
         return erBooket;
     }
-    
+   
+    public void setErBooket(boolean erBooket) {
+        this.erBooket = erBooket; 
+    }
     
     public boolean erLevert(){
         return iBruk = false;
@@ -51,13 +54,16 @@ public class Sykkel {
     }
 
     public void setBattStatusHent() {
-        this.battStatus = battStatus;
-    }
-    
-     public void setBattStatusLev() {
         Date d = new Date(); 
         long antMin = (d.getTime() - levdato.getTime()) / 60000;
-        battStatus = battStatus - (int)(antMin * 0.25 / 60); 
+        battStatus = battStatus - (int)(antMin / 0.25 / 60); 
+    }
+    
+     public void setBattStatusLev(Date hentedato) {
+        Date levering = new Date(); 
+        levdato = levering; 
+        long antMin = (levering.getTime() - (hentedato.getTime())) / 60000;
+        battStatus = battStatus - (int)(antMin * 0.25 / 60);
     }
      
      

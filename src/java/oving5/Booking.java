@@ -1,7 +1,8 @@
 
 package oving5;
 import java.util.Date; 
-
+import java.util.Random;
+import java.text.DecimalFormat;
 /**
  *
  * @author Nina
@@ -11,7 +12,7 @@ public class Booking {
     private Date tidspunktBooking = new Date();
     private Date hentefrist; 
     
-    public Booking(int bookingKode, Date tidspunktBooking){
+    public Booking(Date tidspunktBooking){
         
         this.bookingKode = bookingKode;
         this.tidspunktBooking = tidspunktBooking; 
@@ -28,6 +29,18 @@ public class Booking {
 
     public Date getHentefrist() {
         return hentefrist;
+    }
+    
+    public int genererKode(){
+       Random random = new Random(); 
+       bookingKode = 1000 + random.nextInt(8999);
+       return bookingKode; 
+    }
+    
+    
+    public static void main (String[] args){
+        
+        
     }
     
     
