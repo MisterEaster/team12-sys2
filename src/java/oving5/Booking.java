@@ -2,7 +2,6 @@
 package oving5;
 import java.util.Date; 
 import java.util.Random;
-import java.text.DecimalFormat;
 /**
  *
  * @author Nina
@@ -11,12 +10,11 @@ public class Booking {
     private int bookingKode;
     private Date tidspunktBooking = new Date();
     private Date hentefrist; 
+    private boolean levert; 
     
     public Booking(Date tidspunktBooking){
-        
-        this.bookingKode = bookingKode;
         this.tidspunktBooking = tidspunktBooking; 
-        this.hentefrist = new Date(tidspunktBooking.getTime() + 30*60000);
+        this.hentefrist = new Date(tidspunktBooking.getTime() + 30 *60000);
     }
 
     public int getBookingKode() {
@@ -37,13 +35,8 @@ public class Booking {
        return bookingKode; 
     }
     
-    
     public static void main (String[] args){
         
         
     }
-    
-    
-    
-    
 }

@@ -12,18 +12,10 @@ public class Parkeringsplass {
     private ArrayList<Sykkel> oversiktSykler = new ArrayList<>();
 
     public Parkeringsplass(String navn, ArrayList <Sykkel> oversiktSykler) {
-        //this.id = id;
         this.navn = navn; 
         this.oversiktSykler = oversiktSykler; 
     }
-
-    /*    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-     */
+    
     public String getNavn() {
         return navn;
     }
@@ -40,6 +32,14 @@ public class Parkeringsplass {
         this.oversiktSykler = oversiktSykler;
     }
     
+    public void hentSykkel(ArrayList <Sykkel> oversiktSykler, int index){
+        for (int i = 0; i < oversiktSykler.size(); i++){
+            if(oversiktSykler.get(i) != null){
+                oversiktSykler.set(index, null); 
+            }
+        }
+    }
+    
     public static ArrayList<Sykkel> createList(int antall, int idStart){
        ArrayList <Sykkel> oversiktSykler = new ArrayList(); 
         for (int i = 0; i < antall; i++){
@@ -48,10 +48,7 @@ public class Parkeringsplass {
         return oversiktSykler;
     }
     
-    
-    
-
-    public static void main(String[] args) {
+     public static void main(String[] args) {
         ArrayList <Sykkel> oversiktSykler1 =  createList(20, 1); 
         Parkeringsplass p1 = new Parkeringsplass ("Dragvoll", oversiktSykler1); 
         

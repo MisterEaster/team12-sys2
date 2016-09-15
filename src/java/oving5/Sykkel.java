@@ -10,7 +10,7 @@ public class Sykkel {
     private int sykkelId;
     private boolean iBruk;
     private Date levdato = new Date();
-    private Parkeringsplass p; 
+    private Parkeringsplass parkeringsplass; 
     private boolean erBooket;
     private int battStatus; 
 
@@ -25,7 +25,7 @@ public class Sykkel {
         return sykkelId;
     }
 
-    public void setBikeId(int sykkelId) {
+    public void setSykkelId(int sykkelId) {
         this.sykkelId = sykkelId;
     }
 
@@ -45,8 +45,8 @@ public class Sykkel {
         this.erBooket = erBooket; 
     }
     
-    public boolean erLevert(){
-        return iBruk = false;
+    public void setErLevert(boolean iBruk){
+        this.iBruk = iBruk; 
     }
 
     public int getBattStatus() {
@@ -56,18 +56,16 @@ public class Sykkel {
     public void setBattStatusHent() {
         Date d = new Date(); 
         long antMin = (d.getTime() - levdato.getTime()) / 60000;
-        battStatus = battStatus - (int)(antMin / 0.25 / 60); 
+        battStatus = battStatus + (int)(antMin / 0.25 / 60); 
     }
     
-     public void setBattStatusLev(Date hentedato) {
-        Date levering = new Date(); 
-        levdato = levering; 
-        long antMin = (levering.getTime() - (hentedato.getTime())) / 60000;
+     public void setBattStatusLev(Date hentedato) {  //Status ved innlevering
+        Date levert = new Date(); 
+        levdato = levert; 
+        long antMin = (levert.getTime() - (hentedato.getTime())) / 60000;
         battStatus = battStatus - (int)(antMin * 0.25 / 60);
     }
      
-     
-
     public Date getLevdato() {
         return levdato;
     }
@@ -75,10 +73,4 @@ public class Sykkel {
     public void setLevdato(Date levdato) {
         this.levdato = levdato;
     }
-    
-    
-    
-    
-    
-    
 }
