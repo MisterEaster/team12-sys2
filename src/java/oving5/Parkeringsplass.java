@@ -1,68 +1,54 @@
 package oving5;
 
 import java.util.ArrayList;
-import java.util.Date;
 
-/**
- *
- * @author Nina
- */
 public class Parkeringsplass {
-    private String navn;
-    private ArrayList<Sykkel> oversiktSykler = new ArrayList<>();
+    private final String navn;
+    private ArrayList<Sykkel> oversiktSykler;
 
-    public Parkeringsplass(String navn, ArrayList <Sykkel> oversiktSykler) {
+    public Parkeringsplass(String navn, int antall, int idStart) {
         this.navn = navn; 
-        this.oversiktSykler = oversiktSykler; 
+        for (int i = 0; i < antall; i++){
+            oversiktSykler.add(new Sykkel(idStart+i, false, false, 100)); 
+        } 
     }
     
     public String getNavn() {
         return navn;
     }
 
-    public void setNavn(String navn) {
-        this.navn = navn;
-    }
-
     public ArrayList<Sykkel> getOversiktSykler() {
         return oversiktSykler;
     }
 
-    public void setOversiktSykler(ArrayList <Sykkel> oversiktSykler) {
-        this.oversiktSykler = oversiktSykler;
+    public int finnSykkelPlass(int id){
+        for(int i=0; i<oversiktSykler.size(); i++){
+            if(oversiktSykler.get(i).getSykkelId() == id){
+                return i;
+            }
+        }return -1;
     }
     
-    public void hentSykkel(ArrayList <Sykkel> oversiktSykler, int index){
-        for (int i = 0; i < oversiktSykler.size(); i++){
-            if(oversiktSykler.get(i) != null){
-                oversiktSykler.set(index, null); 
+    public void hentSykkel(int id){
+        for(int i=0; i<oversiktSykler.size(); i++){
+            if(oversiktSykler.get(i).getSykkelId() == id){
+                oversiktSykler.set(i, null);
             }
         }
     }
     
-    public static ArrayList<Sykkel> createList(int antall, int idStart){
-       ArrayList <Sykkel> oversiktSykler = new ArrayList(); 
-        for (int i = 0; i < antall; i++){
-            oversiktSykler.add(new Sykkel(idStart, false, false, 100)); 
-       } 
-        return oversiktSykler;
+    public void leverSykkel(Sykkel sykkel){
+        int i = 0;
+        while(oversiktSykler.get(i) != null){
+            i++;
+        }oversiktSykler.set(i, sykkel);
     }
     
-     public static void main(String[] args) {
-        ArrayList <Sykkel> oversiktSykler1 =  createList(20, 1); 
-        Parkeringsplass p1 = new Parkeringsplass ("Dragvoll", oversiktSykler1); 
-        
-        ArrayList <Sykkel> oversiktSykler2 = createList(20, 21); 
-        Parkeringsplass p2 = new Parkeringsplass ("Kalvskinnet", oversiktSykler2);
-        
-        ArrayList <Sykkel> oversiktSykler3 = createList(20, 41); 
-        Parkeringsplass p3 = new Parkeringsplass ("Gløshaugen", oversiktSykler3);
-        
-        ArrayList <Sykkel> oversiktSykler4 = createList(20, 61); 
-        Parkeringsplass p4 = new Parkeringsplass ("Midtbyen", oversiktSykler4);
-        
-         ArrayList <Sykkel> oversiktSykler5 = createList(20, 81); 
-        Parkeringsplass p5 = new Parkeringsplass ("Solsiden", oversiktSykler5);
-        
+    public boolean checkLedigPlass(){
+        for(Sykkel sykkel:oversiktSykler){
+            if(sykkel == null){
+                return true;
+            }
+        }return false;
     }
 }

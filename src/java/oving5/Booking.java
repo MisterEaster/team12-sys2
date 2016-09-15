@@ -1,24 +1,38 @@
-
 package oving5;
+
 import java.util.Date; 
 import java.util.Random;
-/**
- *
- * @author Nina
- */
+
 public class Booking {
-    private int bookingKode;
-    private Date tidspunktBooking = new Date();
-    private Date hentefrist; 
-    private boolean levert; 
+    private final Random random = new Random(); 
+    private final int bookingKode;
+    private final Sykkel sykkel;
+    private final Date tidspunktBooking;
+    private final Date hentefrist; 
     
-    public Booking(Date tidspunktBooking){
-        this.tidspunktBooking = tidspunktBooking; 
-        this.hentefrist = new Date(tidspunktBooking.getTime() + 30 *60000);
+    public Booking(Sykkel sykkel){
+        this.sykkel = sykkel;
+        tidspunktBooking = new Date();
+        hentefrist = new Date(tidspunktBooking.getTime() + 30 *60000);
+        bookingKode = 1000 + random.nextInt(8999);
     }
 
+    public int getSykkelId(){
+        return sykkel.getSykkelId();
+    }
+    public boolean checkSykkelId(int sykkelId){
+        if(sykkel.getSykkelId() == sykkelId){
+            return true;
+        }return false;
+    }
+    
     public int getBookingKode() {
         return bookingKode;
+    }
+    public boolean checkKode(int bookingKode){
+        if(this.bookingKode == bookingKode){
+            return true;
+        } return false;
     }
 
     public Date getTidspunktBooking() {
@@ -27,16 +41,5 @@ public class Booking {
 
     public Date getHentefrist() {
         return hentefrist;
-    }
-    
-    public int genererKode(){
-       Random random = new Random(); 
-       bookingKode = 1000 + random.nextInt(8999);
-       return bookingKode; 
-    }
-    
-    public static void main (String[] args){
-        
-        
     }
 }
