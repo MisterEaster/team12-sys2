@@ -27,7 +27,8 @@ public class BookingSystem {
         }
     }
     
-    public int bookSykkel(String parkNavn) {
+    //Funker : printer ut streng med info: sykkelID, parkeringsplass og kode
+    public String bookSykkel(String parkNavn) {
         int parkplass = finnParkPlass(parkNavn);
         Parkeringsplass park = parkeringsplasser.get(parkplass);
         
@@ -35,30 +36,30 @@ public class BookingSystem {
             if (!sykkel.getErIBruk() && !sykkel.getErBooket()) {
                 sykkel.setErBooket(true);
                 Booking booking = new Booking(sykkel); 
-                return booking.getBookingKode();
+                return "Du har fått tildelt sykkel "+booking.getSykkelId()+" på "+park.getNavn()+" med kode "+booking.getBookingKode();
             }
         }
-        return -1;
+        return "Feil oppstod";
     }
     
-    public boolean hentSykkel(int kode, int sykkelId, String parkNavn){
+    public String hentSykkel(int kode, int sykkelId, String parkNavn){
         int parkplass = finnParkPlass(parkNavn);
         Parkeringsplass park = parkeringsplasser.get(parkplass);
         for(Booking booking : listeBookinger){
             if(booking.checkSykkelId(sykkelId) && booking.checkKode(kode) && park.finnSykkelPlass(sykkelId)!=-1){
                 park.hentSykkel(sykkelId);
-                return true;
-            }
-        } return false;
+                return "Sykkel "+sykkelId+" er hentet fra "+parkNavn;
+            } 
+        } return "Sykkel er ikke booket, finnes ikke i parkeringsplassen, eller du har brukt feil kode";
     }
     
-    public boolean leverSykkel(String parkNavn, Sykkel sykkel){
+    public String leverSykkel(String parkNavn, Sykkel sykkel){
         int parkplass = finnParkPlass(parkNavn);
         Parkeringsplass park = parkeringsplasser.get(parkplass);
         if(park.checkLedigPlass()){
             park.leverSykkel(sykkel);
-            return true;
-        } return false;
+            return "Sykkel "+sykkel.getSykkelId()+" er levert på "+parkNavn;
+        } return "sykkel ble ikke levert";
     }
 }
     

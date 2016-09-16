@@ -26,7 +26,7 @@ public class Sykkel {
         return erIBruk;
     }
     public void setErIBruk(boolean iBruk) {
-        this.erIBruk = erIBruk; 
+        erIBruk = iBruk; 
     }
 
     public boolean getErBooket() {

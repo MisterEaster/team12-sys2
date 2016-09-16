@@ -4,12 +4,13 @@ import java.util.ArrayList;
 
 public class Parkeringsplass {
     private final String navn;
-    private ArrayList<Sykkel> oversiktSykler;
+    private ArrayList<Sykkel> oversiktSykler = new ArrayList();
 
     public Parkeringsplass(String navn, int antall, int idStart) {
         this.navn = navn; 
         for (int i = 0; i < antall; i++){
-            oversiktSykler.add(new Sykkel(idStart+i, false, false, 100)); 
+            Sykkel sykkel = new Sykkel(idStart+i, false, false, 100);
+            oversiktSykler.add(sykkel); 
         } 
     }
     
