@@ -1,6 +1,5 @@
 package oving5;
 
-
 import java.util.*;
 import javax.ejb.Stateless;
 import javax.ws.rs.*;
@@ -77,6 +76,26 @@ public class BikeResource {
                 bookingmap.remove(sykkelId);                                            //fjern booking fra liste
             }return "Sykkelen ble levert på " + parkNavn;
         }return "sykkel ble ikke levert";
+    }
+    
+    @POST
+    @Path("/revoke")
+    @Produces("text/html")
+    public String revoke(@QueryParam("sykkelId") int sykkelId, @QueryParam("kode") int kode){
+        ArrayList<Booking> bookings = getBookingArr();
+        Parkeringsplass park;
+        Booking booking;
+        
+        for (int i=0; i<bookings.size();i++) {
+            booking = bookings.get(i);
+            park = parkmap.get(booking.getParkNavn());
+            if(booking.getSykkelId()==sykkelId  && park.finnSykkelPlass(sykkelId)!=-1 && booking.checkKode(kode)){
+                park.revoke(sykkelId);
+                bookingmap.remove(sykkelId);
+                parkmap.put(booking.getParkNavn(), park);
+                return "Your booking has been revoked";
+            }
+        } return "feil";
     }
     
     public void always(){
