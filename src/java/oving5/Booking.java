@@ -1,17 +1,25 @@
 package oving5;
 
-import java.util.Date; 
+
+import java.util.Date;
 import java.util.Random;
 
+/**
+ *
+ * @author Nicole
+ */
 public class Booking {
-    private final Random random = new Random(); 
+    
+private final Random random = new Random(); 
     private final int bookingKode;
     private final Sykkel sykkel;
+    private String parkNavn;
     private final Date tidspunktBooking;
     private final Date hentefrist; 
     
-    public Booking(Sykkel sykkel){
+    public Booking(Sykkel sykkel, String parkNavn){
         this.sykkel = sykkel;
+        this.parkNavn = parkNavn;
         tidspunktBooking = new Date();
         hentefrist = new Date(tidspunktBooking.getTime() + 30 *60000);
         bookingKode = 1000 + random.nextInt(8999);

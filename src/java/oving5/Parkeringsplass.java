@@ -1,15 +1,26 @@
 package oving5;
 
+
 import java.util.ArrayList;
 
-public class Parkeringsplass {
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author Nicole
+ */
+public class Parkeringsplass extends Object {
     private final String navn;
     private ArrayList<Sykkel> oversiktSykler = new ArrayList();
 
     public Parkeringsplass(String navn, int antall, int idStart) {
         this.navn = navn; 
         for (int i = 0; i < antall; i++){
-            Sykkel sykkel = new Sykkel(idStart+i, false, false, 100);
+            Sykkel sykkel = new Sykkel(idStart+i);
             oversiktSykler.add(sykkel); 
         } 
     }
@@ -52,4 +63,5 @@ public class Parkeringsplass {
             }
         }return false;
     }
+    
 }
