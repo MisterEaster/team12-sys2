@@ -1,23 +1,17 @@
 package oving5;
 
-
 import java.util.Date;
 
-/**
- *
- * @author Nicole
- */
 public class Sykkel {
     
     private final int sykkelId;
-    private boolean erIBruk;
     private boolean erBooket;
     private int battStatus; 
     private Date levdato;
+    private Date henteDato;
 
     public Sykkel (int sykkelId) {
         this.sykkelId = sykkelId;
-        erIBruk = false;
         erBooket = false;
         battStatus = 100;
         levdato = new Date();
@@ -25,13 +19,6 @@ public class Sykkel {
 
     public int getSykkelId() {
         return sykkelId;
-    }
-
-    public boolean getErIBruk() {
-        return erIBruk;
-    }
-    public void setErIBruk(boolean iBruk) {
-        erIBruk = iBruk; 
     }
 
     public boolean getErBooket() {
@@ -44,8 +31,7 @@ public class Sykkel {
     public int getBattStatus() {
         return battStatus;
     }
-    public void setBattStatusHent() {
-        Date d = new Date(); 
+    public void setBattStatusHent(Date d) {
         long antMin = (d.getTime() - levdato.getTime()) / 60000;
         battStatus = battStatus + (int)(antMin / 0.25 / 60); 
     }
@@ -62,5 +48,14 @@ public class Sykkel {
     public void setLevdato(Date levdato) {
         this.levdato = levdato;
     }
+
+    public Date getHenteDato() {
+        return henteDato;
+    }
+    public void setHenteDato(Date henteDato) {
+        this.henteDato = henteDato;
+    }
+    
+    
 }
 

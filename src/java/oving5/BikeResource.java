@@ -1,22 +1,18 @@
 package oving5;
 
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 import javax.ejb.Stateless;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
+//import javax.ws.rs.core.Response;
 
 @Stateless
 @Path("/bike")
 public class BikeResource {
     private static Map<Integer,Booking> bookingmap = new HashMap<>();
     private static Map<String,Parkeringsplass> parkmap = new HashMap<>();
-    BookingSystem bookingSystem;
 
     public BikeResource() {
-        this.bookingSystem = new BookingSystem();
         parkmap.put("Dragvoll", new Parkeringsplass("Dragvoll", 20, 1));
         parkmap.put("Kalvskinnet", new Parkeringsplass("Kalvskinnet", 20, 21));
         parkmap.put("Gløshaugen", new Parkeringsplass("Gløshaugen", 20, 41));
@@ -27,55 +23,68 @@ public class BikeResource {
     @POST
     @Path("/reserve")
     @Produces("text/html")
-    public Response reserve(@QueryParam("parkNavn") String parkNavn) {
-        //if reserveBike returns code when successful and null when fails
-        String reservationCode = bookingSystem.bookSykkel(parkNavn);
-        
-        if (reservationCode != null) {
-            return Response.ok(reservationCode).build(); // it was successful
-        } else {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        }
+    public String reserve(@QueryParam("parkNavn") String parkNavn) {
+        Parkeringsplass park = parkmap.get("parkNavn");                                 //Velg parkeringsplass fra parkmap
+        for (Sykkel sykkel : park.getOversiktSykler()) {                                //iterer sykler i parkeringsplassen
+            if (!sykkel.getErBooket()) {                                                //velg ubooket sykkel
+                sykkel.setErBooket(true);                                               //oppdater sykkel's booket status
+                Booking booking = new Booking(sykkel, parkNavn);                        //opprett ny booking
+                bookingmap.put(sykkel.getSykkelId(), new Booking(sykkel, parkNavn));    //oppdater map
+                parkmap.put(parkNavn, park);                                            //oppdater parkmap
+                return "Du har fått tildelt sykkel " + booking.getSykkelId() + " på " + park.getNavn() + " med kode " + booking.getBookingKode();
+            }
+        }return "Feil oppstod";
     }
-
-    //@GET
-    //@Path("/somethingElse")
-    //@Produces("text/html")
-    //public String getSomethingElse() {
-    //    return "Something else!";
-    //}
     
-    @GET
-    @Path("/getBookings")
-    @Produces("text/html")
-    public Collection<Booking> getBookingCollection(){
-        return bookingmap.values();
-    }
-
     @POST
     @Path("/release")
     @Produces("text/html")
-    public Response releaseBike(
-            @QueryParam("kode") int kode,
-            @QueryParam("sykkelId") int sykkelId,
-            @QueryParam("parkNavn") String parkNavn ) 
-    {
+    public String releaseBike(@QueryParam("kode") int kode,@QueryParam("sykkelId") int sykkelId,@QueryParam("parkNavn") String parkNavn ){
+        Parkeringsplass park = parkmap.get("parkNavn");
+        ArrayList<Booking> bookings = getBookingArr();
+        Booking booking;
         
-        
-        
-        
-        
-        System.out.println("-------------------------------------------------");
-        System.out.println(kode);
-        System.out.println(sykkelId);
-        System.out.println(parkNavn);
-        System.out.println("-------------------------------------------------");
-        String returnValue = bookingSystem.hentSykkel(kode, sykkelId, parkNavn);
-        if (returnValue != null) {
-            return Response.ok(returnValue).build(); // it was successful
-        } else {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        }
+        for (int i=0; i<bookings.size();i++) {
+            booking = bookings.get(i);
+            if (booking.getSykkelId()==sykkelId && booking.checkKode(kode) && park.finnSykkelPlass(sykkelId)!=-1) {
+                park.hentSykkel(sykkelId);                                              //fjern sykkel fra liste
+                parkmap.put(parkNavn, park);                                            //oppdater parkmap
+                booking.setSykkelHenteTid();                                            //oppdater hentetiden
+                booking.setSykkelBatteriStatHent();                                     //oppdater batteri status !!! SKAL VEKK !!!
+                bookingmap.put(sykkelId, booking);                                      //oppdater bookingmap
+                return "Sykkel "+sykkelId+" er hentet fra "+parkNavn+" den har "
+                        +booking.getSykkelBatteriStat()+"% batteri igjen";
+            }
+        }return "Sykkel er ikke booket, finnes ikke i parkeringsplassen, eller du har brukt feil kode"; 
     }
-
+    
+    @POST
+    @Path("/return")
+    @Produces("text/html")
+    public String returnBike(@QueryParam("parkNavn") String parkNavn, @QueryParam("sykkelId") int sykkelId){
+        Parkeringsplass park = parkmap.get("parkNavn");
+        ArrayList<Booking> bookings = getBookingArr();
+        Booking booking;
+        
+        for (int i=0; i<bookings.size();i++) {
+            booking = bookings.get(i);
+            if(booking.getSykkelId()==sykkelId  && park.checkLedigPlass()){
+                booking.setSykkelLevTid();                                              //oppdater leveringstid
+                booking.setSykkelBatteriStatLev();                                      //oppdater batteristatus !!! SKAL FJERNES !!!
+                booking.setSykkelStat();                                                //oppdater bookingsStatus
+                park.leverSykkel(booking.getSykkel());                                  //sett inn sykkel i parkering
+                parkmap.put(parkNavn, park);                                            //oppdater liste
+                bookingmap.remove(sykkelId);                                            //fjern booking fra liste
+            }return "Sykkelen ble levert på " + parkNavn;
+        }return "sykkel ble ikke levert";
+    }
+    
+    public void always(){
+        //check Booking times
+        //update BatteriStat
+    }
+    
+    public ArrayList<Booking> getBookingArr(){
+        return new ArrayList(bookingmap.values());
+    }
 }

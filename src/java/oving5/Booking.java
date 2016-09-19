@@ -4,10 +4,6 @@ package oving5;
 import java.util.Date;
 import java.util.Random;
 
-/**
- *
- * @author Nicole
- */
 public class Booking {
     
 private final Random random = new Random(); 
@@ -25,13 +21,33 @@ private final Random random = new Random();
         bookingKode = 1000 + random.nextInt(8999);
     }
 
+    public Sykkel getSykkel() {
+        return sykkel;
+    }
     public int getSykkelId(){
         return sykkel.getSykkelId();
     }
-    public boolean checkSykkelId(int sykkelId){
-        if(sykkel.getSykkelId() == sykkelId){
-            return true;
-        }return false;
+    public void setSykkelHenteTid(){
+        sykkel.setHenteDato(new Date());
+    }
+    public void setSykkelLevTid(){
+        sykkel.setLevdato(new Date());
+    }
+    public void setSykkelBatteriStatHent(){
+        sykkel.setBattStatusHent(sykkel.getHenteDato());
+    }
+    public void setSykkelBatteriStatLev(){
+        sykkel.setBattStatusLev(sykkel.getLevdato());
+    }
+    public int getSykkelBatteriStat(){
+        return sykkel.getBattStatus();
+    }
+    public void setSykkelStat(){
+        sykkel.setErBooket(false);
+    }
+
+    public String getParkNavn() {
+        return parkNavn;
     }
     
     public int getBookingKode() {
@@ -43,11 +59,10 @@ private final Random random = new Random();
         } return false;
     }
 
-    public Date getTidspunktBooking() {
+    /*public Date getTidspunktBooking() {   //ubrukt
         return tidspunktBooking;
     }
-
     public Date getHentefrist() {
         return hentefrist;
-    }
+    }*/                                     //ubrukt
 }
