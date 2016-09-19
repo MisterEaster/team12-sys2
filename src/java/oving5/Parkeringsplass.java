@@ -37,12 +37,18 @@ public class Parkeringsplass extends Object {
             }
         }
     }
-    
     public void leverSykkel(Sykkel sykkel){
         int i = 0;
         while(oversiktSykler.get(i) != null){
             i++;
         }oversiktSykler.set(i, sykkel);
+    }
+    public void revoke(int sykkelId){
+        for(int i=0;i<oversiktSykler.size();i++){
+            if(oversiktSykler.get(i).getSykkelId()==sykkelId){
+                oversiktSykler.get(i).setErBooket(false);
+            }
+        }
     }
     
     public boolean checkLedigPlass(){

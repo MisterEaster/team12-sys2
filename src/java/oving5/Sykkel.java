@@ -55,7 +55,5 @@ public class Sykkel {
     public void setHenteDato(Date henteDato) {
         this.henteDato = henteDato;
     }
-    
-    
 }
 

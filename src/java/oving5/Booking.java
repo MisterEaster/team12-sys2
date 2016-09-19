@@ -1,6 +1,5 @@
 package oving5;
 
-
 import java.util.Date;
 import java.util.Random;
 
