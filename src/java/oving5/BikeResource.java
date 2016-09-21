@@ -24,10 +24,7 @@ public class BikeResource {
     public String reserve(@QueryParam("parkNavn") String parkNavn) {
         Parkeringsplass park = parkmap.get(parkNavn);
         ArrayList<Sykkel> arr = park.getOversiktSykler();
-
-        return park.printIds();
-        
-        /*for (Sykkel sykkel : arr) {
+        for (Sykkel sykkel : arr) {
             if (!sykkel.getErBooket()) {
                 sykkel.setErBooket(true);
                 Booking booking = new Booking(sykkel, parkNavn);
@@ -39,7 +36,7 @@ public class BikeResource {
                 }
                 
             }
-        }return "Feil oppstod";*/
+        }return "Feil oppstod";
     }
     
     @POST
