@@ -10,36 +10,45 @@ import javax.ws.rs.*;
 public class BikeResource {
     private static Map<Integer,Booking> bookingmap = new HashMap<>();
     private static Map<String,Parkeringsplass> parkmap = new HashMap<>();
-
-    public BikeResource() {
-        parkmap.put("Dragvoll", new Parkeringsplass("Dragvoll", 20, 1));
-        parkmap.put("Kalvskinnet", new Parkeringsplass("Kalvskinnet", 20, 21));
-        parkmap.put("Gløshaugen", new Parkeringsplass("Gløshaugen", 20, 41));
-        parkmap.put("Midtbyen", new Parkeringsplass("Midtbyen", 20, 61));
-        parkmap.put("Solsiden", new Parkeringsplass("Solsiden", 20, 81));
+    static {
+    parkmap.put("Dragvoll", new Parkeringsplass("Dragvoll", 20, 1));
+    parkmap.put("Kalvskinnet", new Parkeringsplass("Kalvskinnet", 20, 21));
+    parkmap.put("Gløshaugen", new Parkeringsplass("Gløshaugen", 20, 41));
+    parkmap.put("Midtbyen", new Parkeringsplass("Midtbyen", 20, 61));
+    parkmap.put("Solsiden", new Parkeringsplass("Solsiden", 20, 81));
     }
 
     @POST
     @Path("/reserve")
     @Produces("text/html")
     public String reserve(@QueryParam("parkNavn") String parkNavn) {
-        Parkeringsplass park = parkmap.get("parkNavn");                                 //Velg parkeringsplass fra parkmap
-        for (Sykkel sykkel : park.getOversiktSykler()) {                                //iterer sykler i parkeringsplassen
-            if (!sykkel.getErBooket()) {                                                //velg ubooket sykkel
-                sykkel.setErBooket(true);                                               //oppdater sykkel's booket status
-                Booking booking = new Booking(sykkel, parkNavn);                        //opprett ny booking
-                bookingmap.put(sykkel.getSykkelId(), new Booking(sykkel, parkNavn));    //oppdater map
-                parkmap.put(parkNavn, park);                                            //oppdater parkmap
-                return "Du har fått tildelt sykkel " + booking.getSykkelId() + " på " + park.getNavn() + " med kode " + booking.getBookingKode();
+        Parkeringsplass park = parkmap.get(parkNavn);
+        ArrayList<Sykkel> arr = park.getOversiktSykler();
+
+        return park.printIds();
+        
+        /*for (Sykkel sykkel : arr) {
+            if (!sykkel.getErBooket()) {
+                sykkel.setErBooket(true);
+                Booking booking = new Booking(sykkel, parkNavn);
+                bookingmap.put(sykkel.getSykkelId(), booking);
+                parkmap.put(parkNavn, park);
+                if(bookingmap.containsValue(booking)&& parkmap.containsValue(park)){
+                    return "Du har fått tildelt sykkel " + booking.getSykkelId() 
+                        + " på " + park.getNavn() + " med kode " + booking.getBookingKode();
+                }
+                
             }
-        }return "Feil oppstod";
+        }return "Feil oppstod";*/
     }
     
     @POST
     @Path("/release")
     @Produces("text/html")
-    public String releaseBike(@QueryParam("kode") int kode,@QueryParam("sykkelId") int sykkelId,@QueryParam("parkNavn") String parkNavn ){
-        Parkeringsplass park = parkmap.get("parkNavn");
+    public String releaseBike(@QueryParam("kode") int kode,
+            @QueryParam("sykkelId") int sykkelId,
+            @QueryParam("parkNavn") String parkNavn ){
+        Parkeringsplass park = parkmap.get(parkNavn);
         ArrayList<Booking> bookings = getBookingArr();
         Booking booking;
         
@@ -60,8 +69,9 @@ public class BikeResource {
     @POST
     @Path("/return")
     @Produces("text/html")
-    public String returnBike(@QueryParam("parkNavn") String parkNavn, @QueryParam("sykkelId") int sykkelId){
-        Parkeringsplass park = parkmap.get("parkNavn");
+    public String returnBike(@QueryParam("parkNavn") String parkNavn, 
+            @QueryParam("sykkelId") int sykkelId){
+        Parkeringsplass park = parkmap.get(parkNavn);
         ArrayList<Booking> bookings = getBookingArr();
         Booking booking;
         
@@ -81,7 +91,8 @@ public class BikeResource {
     @POST
     @Path("/revoke")
     @Produces("text/html")
-    public String revoke(@QueryParam("sykkelId") int sykkelId, @QueryParam("kode") int kode){
+    public String revoke(@QueryParam("sykkelId") int sykkelId, 
+            @QueryParam("kode") int kode){
         ArrayList<Booking> bookings = getBookingArr();
         Parkeringsplass park;
         Booking booking;

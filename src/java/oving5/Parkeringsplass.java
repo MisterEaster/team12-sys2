@@ -4,12 +4,13 @@ import java.util.ArrayList;
 
 public class Parkeringsplass extends Object {
     private final String navn;
-    private ArrayList<Sykkel> oversiktSykler = new ArrayList();
+    private static ArrayList<Sykkel> oversiktSykler = new ArrayList<>();
 
     public Parkeringsplass(String navn, int antall, int idStart) {
         this.navn = navn; 
+        Sykkel sykkel;
         for (int i = 0; i < antall; i++){
-            Sykkel sykkel = new Sykkel(idStart+i);
+            sykkel = new Sykkel(idStart+i);
             oversiktSykler.add(sykkel); 
         } 
     }
@@ -20,6 +21,12 @@ public class Parkeringsplass extends Object {
 
     public ArrayList<Sykkel> getOversiktSykler() {
         return oversiktSykler;
+    }
+    public String printIds(){
+        String ret = "";
+        for(int i=0; i<oversiktSykler.size();i++){
+            ret += " " + oversiktSykler.get(i).getSykkelId();
+        } return ret;
     }
 
     public int finnSykkelPlass(int id){

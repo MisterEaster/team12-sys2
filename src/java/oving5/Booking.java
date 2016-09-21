@@ -5,19 +5,19 @@ import java.util.Random;
 
 public class Booking {
     
-private final Random random = new Random(); 
+    private final Random random = new Random(); 
     private final int bookingKode;
     private final Sykkel sykkel;
-    private String parkNavn;
+    private final String parkNavn;
     private final Date tidspunktBooking;
     private final Date hentefrist; 
     
     public Booking(Sykkel sykkel, String parkNavn){
         this.sykkel = sykkel;
         this.parkNavn = parkNavn;
-        tidspunktBooking = new Date();
-        hentefrist = new Date(tidspunktBooking.getTime() + 30 *60000);
-        bookingKode = 1000 + random.nextInt(8999);
+        this.tidspunktBooking = new Date();
+        this.hentefrist = new Date(this.tidspunktBooking.getTime() + 30 *60000);
+        this.bookingKode = 1000 + this.random.nextInt(8999);
     }
 
     public Sykkel getSykkel() {
@@ -53,9 +53,7 @@ private final Random random = new Random();
         return bookingKode;
     }
     public boolean checkKode(int bookingKode){
-        if(this.bookingKode == bookingKode){
-            return true;
-        } return false;
+        return this.bookingKode == bookingKode;
     }
 
     /*public Date getTidspunktBooking() {   //ubrukt
