@@ -1,0 +1,18 @@
+* {
+    border: 3px solid black;
+}
+#header {
+    height: 250px;
+    width: 1000px;
+    background-image: url(http://www.bysykler.no/media/bysykkel/trondheim/bs-toppbanner-mal3.jpg);
+}
+#body {
+    height: 1000px;
+    width: 1000px;
+    background-color: greenyellow;
+}
+#footer {
+    height: 1000px;
+    width: 1000px;
+    background-color: green;
+}

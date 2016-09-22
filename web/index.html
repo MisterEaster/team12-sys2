@@ -1,16 +1,77 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="indexcss.css">
+        <title>Sykkel reservering</title>
+        <script>
+            $(document).ready(function(){
+                // Bind opp tabellen mot rest-ressursen '/kunder'
+                $('#myTable').DataTable( {
+                    ajax: {
+                        url: 'potato/bike',
+                        dataSrc: ''
+                    },                  
+                    columns: [
+                        { data: 'id' },
+                        { data: 'name' }
+                    ]
+                });
+                // Slett rest-ressursen '/kunder/kundeId'
+                $("#delete").click(function () {
+                    $.ajax({
+                        url: 'potato/bike/' + $("#deleteId").val(),
+                        type: 'DELETE',
+                        success: function(result) {
+                            $('#myTable').DataTable().ajax.reload();
+                        }
+                    });
+                });
+                // Lag ny rest-ressursen under '/kunder/'
+                $("#create").click(function () {
+                    $.ajax({
+                        url: 'rest/kunder',
+                        type: 'POST',
+                        data: JSON.stringify({
+                            id: $("#newId").val(),
+                            name: $("#newName").val(),
+                        }),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#myTable').DataTable().ajax.reload();
+                        }
+                    });
+                });
+                // Endre rest-ressursen ved å bruke '/kunder/kundeId'
+                 $("#change").click(function () {
+                    $.ajax({
+                        url: 'rest/kunder',
+                        type: 'PUT',
+                        data: JSON.stringify({
+                            id: $("#changeId").val(),
+                            name: $("#changeName").val(),
+                        }),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#myTable').DataTable().ajax.reload();
+                        }
+                    });
+                });
+            });
+        </script>
     </head>
     <body>
-        <div>TODO write content</div>
+        <div id="header">
+            
+        </div>
+        <div id="body">
+            
+        </div>
+        <div id="footer">
+            <p>contact</p>
+            <p>questions</p>
+            <p>stuff</p>
+        </div>
     </body>
 </html>
